@@ -1,0 +1,21 @@
+services:
+  affiliate-system-postgres:
+    image: postgres:18.4-alpine
+    container_name: affiliate-system-postgres
+    environment:
+      - POSTGRES_DB=${DATABASE_POSTGRES_DB}
+      - POSTGRES_USER=${DATABASE_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${DATABASE_POSTGRES_PASSWORD}
+    volumes:
+      - ${PROJECT_ROOT}/backend/out/pgdata:/var/lib/postgresql
+    ports:
+      - "${DATABASE_POSTGRES_PORT}:5432"
+    restart: always
+  
+  affiliate-system-migrate:
+    image: migrate/migrate:v4.19.1
+    container_name: affiliate-system-migrate
+    volumes:
+      - ${PROJECT_ROOT}/backend/migrations:/backend/migrations
+    depends_on:
+      - affiliate-system-postgres
