@@ -47,6 +47,6 @@ migrate-status:
 
 # Run backend application
 run-server:
-	@go mod tidy && go run backend/cmd/server/main.go
+	@cd backend && go mod tidy && go run cmd/server/main.go
 
-.PHONY: env-up env-down migrate-create migrate-up migrate-down migrate-action run migrate-status migrate-force
+.PHONY: env-up env-down migrate-create migrate-up migrate-down migrate-action run-server migrate-status migrate-force
