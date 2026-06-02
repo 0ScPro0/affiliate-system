@@ -3,7 +3,7 @@
 backend/out
 backend/logs
 .gocache
-planning.md
+
 frontend/.DS_Store
 frontend/node_modules
 frontend/dist
