@@ -1,0 +1,1 @@
+ALTER TABLE affiliate_system.cities DROP COLUMN created_at;
