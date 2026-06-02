@@ -17,12 +17,16 @@ export
 
 # ========= Commands =========
 
-# Up postgres  container
+# Up environment docker containers
 env-up:
 	docker compose up -d affiliate-system-postgres
+	docker compose up -d affiliate-system-kafka
+	docker compose up -d affiliate-system-wal-listener
 
-# Down postgres container
+# Down environment docker containers
 env-down:
+	docker compose down -v affiliate-system-wal-listener
+	docker compose down -v affiliate-system-kafka
 	docker compose down -v affiliate-system-postgres
 
 # Create db migration
@@ -53,4 +57,4 @@ run-server:
 run-consumer:
 	@cd backend && go mod tidy && go run cmd/consumer/main.go
 
-.PHONY: env-up env-down migrate-create migrate-up migrate-down migrate-action run-server run-consumer migrate-status migrate-force
+.PHONY: postgres-up postgres-down kafka-up kafka-down migrate-create migrate-up migrate-down migrate-action run-server run-consumer migrate-status migrate-force

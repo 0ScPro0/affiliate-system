@@ -30,10 +30,8 @@
 cmd/
 ├── server/
 │   └── main.go                 # HTTP сервер (CRUD + API для событий)
-├── consumer/
-│   └── main.go                 # Kafka consumer (отдельный процесс)
-└── migrate/
-    └── main.go                 # Утилита для миграций (опционально)
+└── consumer/
+    └── main.go                 # Kafka consumer (отдельный процесс)
 
 internal/
 ├── core/                       # Общая инфраструктура

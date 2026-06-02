@@ -1,0 +1,38 @@
+# WAL Listener Configuration
+database:
+  host: affiliate-system-postgres
+  port: 5432
+  name: affiliate
+  user: affiliate
+  password: affiliate
+  debug: false
+  enableTLS: false
+
+listener:
+  slotName: affiliate_slot
+  refreshConnection: 30s
+  heartbeatInterval: 10s
+  filter:
+    tables:
+      category:
+        - insert
+        - update
+        - delete
+      offer:
+        - insert
+        - update
+        - delete
+      partner:
+        - insert
+        - update
+        - delete
+
+publisher:
+  type: kafka
+  address: affiliate-system-kafka:9092
+  topic: "wal_listener"
+  topicPrefix: affiliate
+
+logger:
+  level: info
+  fmt: json
