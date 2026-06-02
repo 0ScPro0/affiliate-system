@@ -14,15 +14,15 @@ listener:
   heartbeatInterval: 10s
   filter:
     tables:
-      category:
+      categories:
         - insert
         - update
         - delete
-      offer:
+      offers:
         - insert
         - update
         - delete
-      partner:
+      partners:
         - insert
         - update
         - delete
