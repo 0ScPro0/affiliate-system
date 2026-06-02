@@ -51,6 +51,6 @@ run-server:
 
 # Run kafka consumer
 run-consumer:
-	@cd backend && go mod tidy && go run cmd/server/main.go
+	@cd backend && go mod tidy && go run cmd/consumer/main.go
 
-.PHONY: env-up env-down migrate-create migrate-up migrate-down migrate-action run-server migrate-status migrate-force
+.PHONY: env-up env-down migrate-create migrate-up migrate-down migrate-action run-server run-consumer migrate-status migrate-force
