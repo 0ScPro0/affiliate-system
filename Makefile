@@ -45,8 +45,12 @@ migrate-action:
 migrate-status:
 	$(MIGRATE_ACTION) status
 
-# Run backend application
+# Run http server
 run-server:
+	@cd backend && go mod tidy && go run cmd/server/main.go
+
+# Run kafka consumer
+run-consumer:
 	@cd backend && go mod tidy && go run cmd/server/main.go
 
 .PHONY: env-up env-down migrate-create migrate-up migrate-down migrate-action run-server migrate-status migrate-force
