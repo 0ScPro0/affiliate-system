@@ -24,7 +24,7 @@ type DatabaseConfig struct {
 	Password string        `envconfig:"POSTGRES_PASSWORD" required:"true"`
 	DB       string        `envconfig:"POSTGRES_DB" required:"true"`
 	DBUrl    string        `envconfig:"POSTGRES_URL" required:"true"`
-	Timeot   time.Duration `envconfig:"POSTGRES_TIMEOUT" required:"true"`
+	Timeout   time.Duration `envconfig:"POSTGRES_TIMEOUT" required:"true"`
 }
 
 type LoggerConfig struct {

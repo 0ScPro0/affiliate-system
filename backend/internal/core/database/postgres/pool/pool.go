@@ -44,7 +44,7 @@ func NewConnectionPool(ctx context.Context, cfg config.Config) (*ConnectionPool,
 
 	return &ConnectionPool{
 		Pool: pool,
-		operationTimeout: cfg.Database.Timeot,
+		operationTimeout: cfg.Database.Timeout,
 	}, nil
 }
 
