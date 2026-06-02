@@ -8,7 +8,7 @@ type CreateCityRequest struct {
 
 type UpdateCityRequest struct {
 	ID        int
-	Name      string
+	Name      *string
 }
 
 type CityResponse struct {
