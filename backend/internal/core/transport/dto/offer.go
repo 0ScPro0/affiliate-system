@@ -17,3 +17,14 @@ type UpdateOfferRequest struct {
 	Description *string
 	ExpireAt    *time.Time
 }
+
+type OfferResponse struct {
+	ID          int
+	PartnerID   int
+	CategoryID  int
+	CityID      int
+	Name        string
+	Description *string
+	CreatedAt   time.Time
+	ExpireAt 	time.Time
+}
