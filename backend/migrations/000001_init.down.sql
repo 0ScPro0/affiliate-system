@@ -6,4 +6,4 @@ DROP TABLE IF EXISTS affiliate_system.offer;
 DROP TABLE IF EXISTS affiliate_system.partner;
 DROP TABLE IF EXISTS affiliate_system.category;
 
-DROP SCHEMA IF EXISTS affiliate_system;
+DROP SCHEMA IF EXISTS affiliate_system CASCADE;

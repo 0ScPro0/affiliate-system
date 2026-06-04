@@ -1,2 +1,2 @@
-ALTER TABLE affiliate_system.cities
+ALTER TABLE IF EXISTS affiliate_system.cities
 ADD COLUMN created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP;

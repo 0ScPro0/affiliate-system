@@ -1,5 +1,5 @@
-ALTER TABLE affiliate_system.partner
+ALTER TABLE IF EXISTS affiliate_system.partner
 ADD COLUMN created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
-ALTER TABLE affiliate_system.category
+ALTER TABLE IF EXISTS affiliate_system.category
 ADD COLUMN created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP;
