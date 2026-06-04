@@ -5,6 +5,7 @@ import (
 	"time"
 
 	core_errors "github.com/0ScPro0/affiliate-system/internal/core/errors"
+	core_utils "github.com/0ScPro0/affiliate-system/internal/core/utils"
 )
 
 type Partner struct {
@@ -29,34 +30,28 @@ func NewPartner(
 }
 
 func (p *Partner) Validate() error {
-	// ID validation
 	if p.ID < 0 {
 		return fmt.Errorf("invalid `ID`: %d: %w", p.ID, core_errors.ErrInvalidArgument)
 	}
 
-	// Name validation
-	nameLength := len([]rune(p.Name))
-	if nameLength < 1 || nameLength > 100 {
+	if !core_utils.ValidateStringLen(p.Name, 1, 100) {
 		return fmt.Errorf(
-			"invalid `Name` len: %d: %w",
-			nameLength,
+			"invalid `Name` length: %d (must be 1-100): %w",
+			core_utils.GetStringLen(p.Name),
 			core_errors.ErrInvalidArgument,
 		)
 	}
 
-	// Description validation
 	if p.Description != nil {
-		descriptionLength := len([]rune(*p.Description))
-		if descriptionLength < 1 || descriptionLength > 1000 {
+		if !core_utils.ValidateStringLen(*p.Description, 1, 1000) {
 			return fmt.Errorf(
-				"invalid `Description` len: %d: %w",
-				descriptionLength,
+				"invalid `Description` length: %d (must be 1-1000): %w",
+				core_utils.GetStringLen(*p.Description),
 				core_errors.ErrInvalidArgument,
 			)
 		}
 	}
 
-	// CreatedAt validation
 	if p.CreatedAt.IsZero() {
 		return fmt.Errorf("created_at cannot be zero: %w", core_errors.ErrInvalidArgument)
 	}

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	core_errors "github.com/0ScPro0/affiliate-system/internal/core/errors"
+	core_utils "github.com/0ScPro0/affiliate-system/internal/core/utils"
 )
 
 type City struct {
@@ -26,11 +27,10 @@ func (c *City) Validate() error {
 		return fmt.Errorf("invalid `ID`: %d: %w", c.ID, core_errors.ErrInvalidArgument)
 	}
 
-	nameLength := len([]rune(c.Name))
-	if nameLength < 1 || nameLength > 50 {
+	if !core_utils.ValidateStringLen(c.Name, 1, 50) {
 		return fmt.Errorf(
-			"invalid `Name` len: %d: %w",
-			nameLength,
+			"invalid `Name` length: %d (must be 1-50): %w",
+			core_utils.GetStringLen(c.Name),
 			core_errors.ErrInvalidArgument,
 		)
 	}

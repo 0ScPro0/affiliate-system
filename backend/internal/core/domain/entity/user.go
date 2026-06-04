@@ -6,6 +6,7 @@ import (
 	"time"
 
 	core_errors "github.com/0ScPro0/affiliate-system/internal/core/errors"
+	core_utils "github.com/0ScPro0/affiliate-system/internal/core/utils"
 )
 
 type User struct {
@@ -36,41 +37,32 @@ func NewUser(
 }
 
 func (u *User) Validate() error {
-	// ID validation
 	if u.ID < 0 {
 		return fmt.Errorf("invalid `ID`: %d: %w", u.ID, core_errors.ErrInvalidArgument)
 	}
 
-	// UserName validation (optional)
 	if u.UserName != nil {
-		usernameLength := len([]rune(*u.UserName))
-		if usernameLength < 1 || usernameLength > 50 {
+		if !core_utils.ValidateStringLen(*u.UserName, 1, 50) {
 			return fmt.Errorf(
 				"invalid `UserName` length: %d (must be 1-50): %w",
-				usernameLength,
+				core_utils.GetStringLen(*u.UserName),
 				core_errors.ErrInvalidArgument,
 			)
 		}
 	}
 
-	// Email validation
 	if err := u.validateEmail(); err != nil {
 		return err
 	}
 
-	// PasswordHash validation
-	if len(u.PasswordHash) == 0 {
-		return fmt.Errorf("invalid `PasswordHash`: cannot be empty: %w", core_errors.ErrInvalidArgument)
-	}
-
-	if len(u.PasswordHash) > 255 {
-		return fmt.Errorf("invalid `PasswordHash` length: %d (max 255): %w",
-			len(u.PasswordHash),
+	if !core_utils.ValidateStringLen(u.PasswordHash, 1, 255) {
+		return fmt.Errorf(
+			"invalid `PasswordHash` length: %d (must be 1-255): %w",
+			core_utils.GetStringLen(u.PasswordHash),
 			core_errors.ErrInvalidArgument,
 		)
 	}
 
-	// CreatedAt validation
 	if u.CreatedAt.IsZero() {
 		return fmt.Errorf("invalid `CreatedAt`: cannot be zero: %w", core_errors.ErrInvalidArgument)
 	}
@@ -79,13 +71,12 @@ func (u *User) Validate() error {
 }
 
 func (u *User) validateEmail() error {
-	// Basic email regex
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 
-	if len(u.Email) < 1 || len(u.Email) > 100 {
+	if !core_utils.ValidateStringLen(u.Email, 1, 100) {
 		return fmt.Errorf(
 			"invalid `Email` length: %d (must be 1-100): %w",
-			len(u.Email),
+			core_utils.GetStringLen(u.Email),
 			core_errors.ErrInvalidArgument,
 		)
 	}
