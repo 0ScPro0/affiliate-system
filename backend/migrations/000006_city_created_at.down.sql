@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS affiliate_system.cities DROP COLUMN created_at;
