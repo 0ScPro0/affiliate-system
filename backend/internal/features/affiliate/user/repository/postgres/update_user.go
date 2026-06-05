@@ -37,7 +37,8 @@ func (r *UserRepository) UpdateUser(
 			ELSE is_admin 
 		END
 		WHERE id = $1
-		RETURNING id, username, email, password_hash, is_admin, created_at
+		RETURNING id, username, email, password_hash, is_admin, created_at,
+		          refresh_token, refresh_token_expires_at
 	`
 
 	row := r.pool.QueryRow(ctx, query, user.ID, user.UserName, user.Email, user.PasswordHash, user.IsAdmin)
@@ -50,6 +51,8 @@ func (r *UserRepository) UpdateUser(
 		&userModel.PasswordHash,
 		&userModel.IsAdmin,
 		&userModel.CreatedAt,
+		&userModel.RefreshToken,
+		&userModel.RefreshTokenExpiresAt,
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -66,6 +69,10 @@ func (r *UserRepository) UpdateUser(
 		userModel.IsAdmin,
 		userModel.CreatedAt,
 	)
+
+	if userModel.RefreshToken != nil {
+		userDomain.WithTokens("", userModel.RefreshToken, userModel.RefreshTokenExpiresAt)
+	}
 
 	return userDomain, nil
 }

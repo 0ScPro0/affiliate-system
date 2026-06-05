@@ -19,7 +19,8 @@ func (r *UserRepository) CreateUser(
 	query := `
 		INSERT INTO affiliate_system.users (username, email, password_hash, is_admin)
 		VALUES ($1, $2, $3, $4)
-		RETURNING id, username, email, password_hash, is_admin, created_at
+		RETURNING id, username, email, password_hash, is_admin, created_at,
+		          refresh_token, refresh_token_expires_at
 	`
 
 	row := r.pool.QueryRow(ctx, query, user.UserName, user.Email, user.PasswordHash, user.IsAdmin)
@@ -32,6 +33,8 @@ func (r *UserRepository) CreateUser(
 		&userModel.PasswordHash,
 		&userModel.IsAdmin,
 		&userModel.CreatedAt,
+		&userModel.RefreshToken,
+		&userModel.RefreshTokenExpiresAt,
 	)
 	if err != nil {
 		return domain.User{}, fmt.Errorf("create user error: %w", err)
@@ -45,6 +48,10 @@ func (r *UserRepository) CreateUser(
 		userModel.IsAdmin,
 		userModel.CreatedAt,
 	)
+
+	if userModel.RefreshToken != nil {
+		userDomain.WithTokens("", userModel.RefreshToken, userModel.RefreshTokenExpiresAt)
+	}
 
 	return userDomain, nil
 }

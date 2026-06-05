@@ -18,7 +18,8 @@ func (r *UserRepository) GetUserByID(
 	defer cancel()
 
 	query := `
-		SELECT id, username, email, password_hash, is_admin, created_at
+		SELECT id, username, email, password_hash, is_admin, created_at,
+		       refresh_token, refresh_token_expires_at
 		FROM affiliate_system.users
 		WHERE id = $1
 	`
@@ -33,6 +34,8 @@ func (r *UserRepository) GetUserByID(
 		&userModel.PasswordHash,
 		&userModel.IsAdmin,
 		&userModel.CreatedAt,
+		&userModel.RefreshToken,
+		&userModel.RefreshTokenExpiresAt,
 	)
 
 	if err != nil {
@@ -51,6 +54,10 @@ func (r *UserRepository) GetUserByID(
 		userModel.CreatedAt,
 	)
 
+	if userModel.RefreshToken != nil {
+		userDomain.WithTokens("", userModel.RefreshToken, userModel.RefreshTokenExpiresAt)
+	}
+
 	return userDomain, nil
 }
 
@@ -62,7 +69,8 @@ func (r *UserRepository) GetUserByEmail(
 	defer cancel()
 
 	query := `
-		SELECT id, username, email, password_hash, is_admin, created_at
+		SELECT id, username, email, password_hash, is_admin, created_at,
+		       refresh_token, refresh_token_expires_at
 		FROM affiliate_system.users
 		WHERE email = $1
 	`
@@ -77,6 +85,8 @@ func (r *UserRepository) GetUserByEmail(
 		&userModel.PasswordHash,
 		&userModel.IsAdmin,
 		&userModel.CreatedAt,
+		&userModel.RefreshToken,
+		&userModel.RefreshTokenExpiresAt,
 	)
 
 	if err != nil {
@@ -94,6 +104,10 @@ func (r *UserRepository) GetUserByEmail(
 		userModel.IsAdmin,
 		userModel.CreatedAt,
 	)
+
+	if userModel.RefreshToken != nil {
+		userDomain.WithTokens("", userModel.RefreshToken, userModel.RefreshTokenExpiresAt)
+	}
 
 	return userDomain, nil
 }
