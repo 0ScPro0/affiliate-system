@@ -93,6 +93,7 @@ func main() {
 	httpServer := core_http_server.NewHTTPServer(
 		cfg,
 		log,
+		core_http_middleware.CORS(),
 		core_http_middleware.RequestID(),
 		core_http_middleware.Logger(log),
 		core_http_middleware.Panic(),
