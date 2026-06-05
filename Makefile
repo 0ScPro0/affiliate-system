@@ -57,4 +57,7 @@ run-server:
 run-consumer:
 	@cd backend && go mod tidy && go run cmd/consumer/main.go
 
+swagger-gen:
+	@docker compose run --rm affiliate-system-swagger init -g cmd/server/main.go -o docs --parseInternal --parseDependency
+
 .PHONY: postgres-up postgres-down kafka-up kafka-down migrate-create migrate-up migrate-down migrate-action run-server run-consumer migrate-status migrate-force

@@ -2,6 +2,7 @@
 .env
 backend/out
 backend/logs
+backend/server.exe
 .gocache
 
 frontend/.DS_Store
