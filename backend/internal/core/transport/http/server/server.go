@@ -8,8 +8,10 @@ import (
 	"net/http"
 	"strconv"
 
+	httpSwagger "github.com/swaggo/http-swagger"
 	"go.uber.org/zap"
 
+	"github.com/0ScPro0/affiliate-system/docs"
 	"github.com/0ScPro0/affiliate-system/internal/core/config"
 	"github.com/0ScPro0/affiliate-system/internal/core/logger"
 	core_http_middleware "github.com/0ScPro0/affiliate-system/internal/core/transport/http/middleware"
@@ -36,21 +38,39 @@ func NewHTTPServer(
 	}
 }
 
-func (h *HTTPServer) RegisterAPIVersionRouter(routers ...APIVersionRouter){
+func (s *HTTPServer) RegisterAPIVersionRouter(routers ...APIVersionRouter){
 	for _, router := range routers{
 		prefix := "/api/" + string(router.apiVersion)
 
-		h.mux.Handle(
+		s.mux.Handle(
 			prefix + "/", 
 			http.StripPrefix(prefix, router),
 		)
 	}
 }
 
-func (h *HTTPServer) Run(ctx context.Context) error {
-	mux := core_http_middleware.ChainMiddleware(h.mux, h.middleware...)
+func (s *HTTPServer) RegisterSwagger() {
+	s.mux.Handle(
+		"/docs/",
+		httpSwagger.Handler(
+			httpSwagger.URL("/docs/doc.json"),
+		),
+	)
 
-	addr := net.JoinHostPort(h.config.Host, strconv.Itoa(h.config.Port))
+	s.mux.HandleFunc(
+		"/docs/doc.json",
+		func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte(docs.SwaggerInfo.ReadDoc()))
+		},
+	)
+}
+
+func (s *HTTPServer) Run(ctx context.Context) error {
+	mux := core_http_middleware.ChainMiddleware(s.mux, s.middleware...)
+
+	addr := net.JoinHostPort(s.config.Host, strconv.Itoa(s.config.Port))
 	server := &http.Server{
 		Addr: addr,
 		Handler: mux,
@@ -61,7 +81,7 @@ func (h *HTTPServer) Run(ctx context.Context) error {
 	go func() {
 		defer close(ch)
 
-		h.log.Warn("Start HTTP server", zap.String("addr", addr))
+		s.log.Warn("Start HTTP server", zap.String("addr", addr))
 
 		err := server.ListenAndServe()
 
@@ -76,11 +96,11 @@ func (h *HTTPServer) Run(ctx context.Context) error {
 			return fmt.Errorf("Listen and server HTTP: %w", err)
 		}
 	case <-ctx.Done():
-		h.log.Warn("Shutdown HTTP server...")
+		s.log.Warn("Shutdown HTTP server...")
 
 		shutdownCtx, cancel := context.WithTimeout(
 			context.Background(),
-			h.config.ShutdownTimeout,
+			s.config.ShutdownTimeout,
 		)
 		defer cancel()
 
@@ -91,7 +111,7 @@ func (h *HTTPServer) Run(ctx context.Context) error {
 		}
 	}
 
-	h.log.Warn("HTTP server stopped")
+	s.log.Warn("HTTP server stopped")
 	return nil
 
 }

@@ -23,6 +23,12 @@ func Auth(cfg *config.Config) Middleware {
 			log := logger.FromContext(r.Context())
 			responseHandler := core_http_response.NewHTTPResponseHandler(log, w)
 
+			// Skip auth for swagger docs (any path starting with /docs)
+			if strings.HasPrefix(r.URL.Path, "/docs") {
+				next.ServeHTTP(w, r)
+				return
+			}
+
 			authHeader := r.Header.Get("Authorization")
 			if authHeader == "" {
 				responseHandler.ErrorResponse(
