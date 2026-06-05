@@ -8,11 +8,6 @@ import (
 	core_utils "github.com/0ScPro0/affiliate-system/internal/core/utils"
 )
 
-// ===================== TOKEN TYPE =====================
-type TokenType string
-
-const Bearer TokenType = "bearer"
-
 // ===================== REGISTER =====================
 type RegisterRequest struct {
 	UserName *string
@@ -52,7 +47,6 @@ type RegisterResponse struct {
 	AccessTokenExpiresAt  time.Time
 	RefreshToken          string
 	RefreshTokenExpiresAt time.Time
-	TokenType             TokenType
 }
 
 // ===================== LOGIN =====================
@@ -82,7 +76,6 @@ type LoginResponse struct {
 	AccessToken          string
 	AccessTokenExpiresAt time.Time
 	RefreshToken         string
-	TokenType            TokenType
 }
 
 // ===================== REFRESH TOKEN =====================
