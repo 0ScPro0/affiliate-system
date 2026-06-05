@@ -2,6 +2,7 @@ package user_service
 
 import (
 	"context"
+	"time"
 
 	domain "github.com/0ScPro0/affiliate-system/internal/core/domain/entity"
 	core_transport_dto "github.com/0ScPro0/affiliate-system/internal/core/transport/dto"
@@ -31,6 +32,13 @@ type UserRepository interface {
 		ctx context.Context,
 		user core_transport_dto.UpdateUserRequest,
 	) (domain.User, error)
+
+	UpdateUserRefreshToken(
+		ctx context.Context,
+		id int,
+		refreshToken *string,
+		refreshTokenExpiresAt *time.Time,
+	) error
 
 	DeleteUser(
 		ctx context.Context,
