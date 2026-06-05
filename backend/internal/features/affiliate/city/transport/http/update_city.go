@@ -2,6 +2,7 @@ package city_transport_http
 
 import (
 	"net/http"
+	"strconv"
 
 	core_errors "github.com/0ScPro0/affiliate-system/internal/core/errors"
 	"github.com/0ScPro0/affiliate-system/internal/core/logger"
@@ -11,6 +12,21 @@ import (
 	core_http_response "github.com/0ScPro0/affiliate-system/internal/core/transport/http/response"
 )
 
+// UpdateCity godoc
+// @Summary Update city
+// @Description Update existing city by ID
+// @Tags cities
+// @Accept json
+// @Produce json
+// @Param id path int true "City ID"
+// @Param request body core_transport_dto.UpdateCityRequest true "UpdateCity request body"
+// @Success 200 {object} core_transport_dto.CityResponse "City updated successfully"
+// @Failure 400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 403 {object} core_http_response.ErrorResponse "Forbidden"
+// @Failure 404 {object} core_http_response.ErrorResponse "Not found"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /cities/{id} [patch]
 func (h *CityHTTPHandler) UpdateCity(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := logger.FromContext(ctx)
@@ -19,29 +35,46 @@ func (h *CityHTTPHandler) UpdateCity(rw http.ResponseWriter, r *http.Request) {
 	// Check user auth and permissions
 	user := core_http_middleware.GetUserClaims(ctx)
 	if user == nil {
-		responseHandler.ErrorResponse(core_errors.ErrUnauthorized, "Unauthorized")
+		responseHandler.ErrorResponse(core_errors.ErrUnauthorized, "unauthorized")
+		return
 	}
 	if isAdmin, ok := user["is_admin"].(bool); !ok || !isAdmin {
-		responseHandler.ErrorResponse(core_errors.ErrForbidden, "Not enough permissions")
+		responseHandler.ErrorResponse(core_errors.ErrForbidden, "not enough permissions")
+		return
+	}
+
+	// Get id from path
+	id := r.PathValue("id")
+	if id == "" {
+		responseHandler.ErrorResponse(core_errors.ErrInvalidArgument, "city id is required")
+		return
+	}
+	cityID, err := strconv.Atoi(id)
+	if err != nil {
+		responseHandler.ErrorResponse(core_errors.ErrInvalidArgument, "invalid city ID format")
+		return
 	}
 
 	// Validate request
 	var request core_transport_dto.UpdateCityRequest
-	if err := core_http_request.DecodeAndValidateRequest(r, request); err != nil {
+	if err := core_http_request.DecodeAndValidateRequest(r, &request); err != nil {
 		responseHandler.ErrorResponse(err, "failed to decode and validate HTTP request")
+		return
 	}
+	request.ID = cityID
 
 	// Update city
 	city, err := h.cityService.UpdateCity(ctx, request)
 	if err != nil {
 		responseHandler.ErrorResponse(err, "failed to update city")
+		return
 	}
 
 	// Response
 	response := core_transport_dto.CityResponse{
-		ID: city.ID,
-		Name: city.Name,
+		ID:        city.ID,
+		Name:      city.Name,
 		CreatedAt: city.CreatedAt,
 	}
-	responseHandler.JSONResponse(response, http.StatusCreated)
+	responseHandler.JSONResponse(response, http.StatusOK)
 }
