@@ -43,10 +43,10 @@ func (r *RegisterRequest) Validate() error {
 
 type RegisterResponse struct {
 	UserResponse
-	AccessToken           string
-	AccessTokenExpiresAt  time.Time
-	RefreshToken          string
-	RefreshTokenExpiresAt time.Time
+	AccessToken           string    `json:"access_token"`
+	AccessTokenExpiresAt  time.Time `json:"access_token_expires_at"`
+	RefreshToken          string    `json:"refresh_token"`
+	RefreshTokenExpiresAt time.Time `json:"refresh_token_expires_at"`
 }
 
 // ===================== LOGIN =====================
@@ -73,15 +73,14 @@ func (r *LoginRequest) Validate() error {
 
 type LoginResponse struct {
 	UserResponse
-	AccessToken          string
-	AccessTokenExpiresAt time.Time
-	RefreshToken         string
+	AccessToken          string    `json:"access_token"`
+	AccessTokenExpiresAt time.Time `json:"access_token_expires_at"`
+	RefreshToken         string    `json:"refresh_token"`
 }
 
 // ===================== REFRESH TOKEN =====================
 type RefreshTokenRequest struct {
-	RefreshToken          string
-	RefreshTokenExpiresAt time.Time
+	RefreshToken string `json:"refresh_token"`
 }
 
 func (r *RefreshTokenRequest) Validate() error {
@@ -93,14 +92,10 @@ func (r *RefreshTokenRequest) Validate() error {
 		)
 	}
 
-	if r.RefreshTokenExpiresAt.IsZero() {
-		return fmt.Errorf("invalid `RefreshTokenExpiresAt`: cannot be zero: %w", core_errors.ErrInvalidArgument)
-	}
-
 	return nil
 }
 
 type RefreshTokenResponse struct {
-	AccessToken          string
-	AccessTokenExpiresAt time.Time
+	AccessToken          string    `json:"access_token"`
+	AccessTokenExpiresAt time.Time `json:"access_token_expires_at"`
 }

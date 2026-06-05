@@ -10,12 +10,15 @@ import (
 )
 
 type User struct {
-	ID           int
-	UserName     *string
-	Email        string
-	PasswordHash string
-	IsAdmin      bool
-	CreatedAt    time.Time
+	ID                  int
+	UserName            *string
+	Email               string
+	PasswordHash        string
+	IsAdmin             bool
+	CreatedAt           time.Time
+	AccessToken         *string
+	RefreshToken        *string
+	RefreshTokenExpiresAt *time.Time
 }
 
 func NewUser(
@@ -34,6 +37,14 @@ func NewUser(
 		IsAdmin:      isAdmin,
 		CreatedAt:    createdAt,
 	}
+}
+
+// WithTokens sets the access and refresh tokens on the user.
+func (u *User) WithTokens(accessToken string, refreshToken *string, refreshTokenExpiresAt *time.Time) *User {
+	u.AccessToken = &accessToken
+	u.RefreshToken = refreshToken
+	u.RefreshTokenExpiresAt = refreshTokenExpiresAt
+	return u
 }
 
 func (u *User) Validate() error {

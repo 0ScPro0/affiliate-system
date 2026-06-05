@@ -85,11 +85,14 @@ func (r *UpdateUserRequest) Validate() error {
 }
 
 type UserResponse struct {
-	ID        int       `json:"id"`
-	UserName  *string   `json:"username"`
-	Email     string    `json:"email"`
-	IsAdmin   bool      `json:"is_admin"`
-	CreatedAt time.Time `json:"created_at"`
+	ID                  int        `json:"id"`
+	UserName            *string    `json:"username"`
+	Email               string     `json:"email"`
+	IsAdmin             bool       `json:"is_admin"`
+	CreatedAt           time.Time  `json:"created_at"`
+	AccessToken         *string    `json:"access_token,omitempty"`
+	RefreshToken        *string    `json:"refresh_token,omitempty"`
+	RefreshTokenExpiresAt *time.Time `json:"refresh_token_expires_at,omitempty"`
 }
 
 func validateEmail(email string) error {
