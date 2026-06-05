@@ -42,6 +42,7 @@ func main() {
 		core_http_middleware.Logger(log),
 		core_http_middleware.Panic(),
 		core_http_middleware.Trace(),
+		core_http_middleware.Auth(cfg),
 	)
 	httpServer.RegisterAPIVersionRouter(*apiVersionRouter)
 
