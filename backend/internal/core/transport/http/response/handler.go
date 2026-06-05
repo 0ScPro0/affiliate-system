@@ -90,6 +90,10 @@ func (h *HTTPResponseHandler) compareStatusError(err error) (int, func(string, .
 		statusCode = http.StatusUnauthorized
 		logFunc = h.log.Warn
 	
+	case errors.Is(err, core_error.ErrForbidden):
+		statusCode = http.StatusForbidden
+		logFunc = h.log.Warn
+	
 	default:
 		statusCode = http.StatusInternalServerError
 		logFunc = h.log.Error
