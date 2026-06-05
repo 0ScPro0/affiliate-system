@@ -24,7 +24,13 @@ type DatabaseConfig struct {
 	Password string        `envconfig:"POSTGRES_PASSWORD" required:"true"`
 	DB       string        `envconfig:"POSTGRES_DB" required:"true"`
 	DBUrl    string        `envconfig:"POSTGRES_URL" required:"true"`
-	Timeout   time.Duration `envconfig:"POSTGRES_TIMEOUT" required:"true"`
+	Timeout  time.Duration `envconfig:"POSTGRES_TIMEOUT" required:"true"`
+}
+
+type SecurityConfig struct {
+	SecretKey                string `envconfig:"SECRET_KEY" required:"true"`
+	AccessTokenExpireMinutes int    `envconfig:"ACCESS_TOKEN_EXPIRE_MINUTES" required:"true"`
+	RefreshTokenExpireDays   int    `envconfig:"REFRESH_TOKEN_EXPIRE_DAYS" required:"true"`
 }
 
 type LoggerConfig struct {
@@ -39,6 +45,7 @@ type EnvironmentConfig struct {
 type Config struct {
 	Server      ServerConfig
 	Database    DatabaseConfig
+	Security    SecurityConfig 
 	Logger      LoggerConfig
 	Environment EnvironmentConfig
 }
@@ -56,6 +63,7 @@ func LoadConfig() (*Config, error) {
 	processors := map[string]any{
 		"SERVER":      &config.Server,
 		"DATABASE":    &config.Database,
+		"SECURITY":    &config.Security,
 		"LOGGER":      &config.Logger,
 		"ENVIRONMENT": &config.Environment,
 	}
