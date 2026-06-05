@@ -10,9 +10,9 @@ import (
 
 // ===================== REGISTER =====================
 type RegisterRequest struct {
-	UserName *string
-	Email    string
-	Password string
+	UserName *string `json:"username"`
+	Email    string  `json:"email"`
+	Password string  `json:"password"`
 }
 
 func (r *RegisterRequest) Validate() error {
@@ -51,8 +51,8 @@ type RegisterResponse struct {
 
 // ===================== LOGIN =====================
 type LoginRequest struct {
-	Email    string
-	Password string
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 func (r *LoginRequest) Validate() error {
