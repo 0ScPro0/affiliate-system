@@ -1,0 +1,1006 @@
+basePath: /api/v1/
+definitions:
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CategoryResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CityResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CreateCategoryRequest:
+    properties:
+      description:
+        maxLength: 1000
+        minLength: 1
+        type: string
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+    required:
+    - name
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CreateCityRequest:
+    properties:
+      name:
+        maxLength: 50
+        minLength: 1
+        type: string
+    required:
+    - name
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CreatePartnerRequest:
+    properties:
+      description:
+        maxLength: 1000
+        minLength: 1
+        type: string
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+    required:
+    - name
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CreateUserRequest:
+    properties:
+      email:
+        maxLength: 100
+        type: string
+      is_admin:
+        type: boolean
+      password_hash:
+        maxLength: 255
+        minLength: 1
+        type: string
+      username:
+        maxLength: 50
+        minLength: 1
+        type: string
+    required:
+    - email
+    - password_hash
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.LoginResponse:
+    properties:
+      access_token:
+        type: string
+      access_token_expires_at:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      is_admin:
+        type: boolean
+      refresh_token:
+        type: string
+      refresh_token_expires_at:
+        type: string
+      username:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.PartnerResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.RefreshTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.RefreshTokenResponse:
+    properties:
+      access_token:
+        type: string
+      access_token_expires_at:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.RegisterResponse:
+    properties:
+      access_token:
+        type: string
+      access_token_expires_at:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      is_admin:
+        type: boolean
+      refresh_token:
+        type: string
+      refresh_token_expires_at:
+        type: string
+      username:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateCategoryRequest:
+    properties:
+      description:
+        maxLength: 1000
+        minLength: 1
+        type: string
+      id:
+        type: integer
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+    required:
+    - id
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateCityRequest:
+    properties:
+      id:
+        type: integer
+      name:
+        maxLength: 50
+        minLength: 1
+        type: string
+    required:
+    - id
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdatePartnerRequest:
+    properties:
+      description:
+        maxLength: 1000
+        minLength: 1
+        type: string
+      id:
+        type: integer
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateUserRequest:
+    properties:
+      email:
+        maxLength: 100
+        type: string
+      id:
+        type: integer
+      is_admin:
+        type: boolean
+      password_hash:
+        maxLength: 255
+        minLength: 1
+        type: string
+      username:
+        maxLength: 50
+        minLength: 1
+        type: string
+    required:
+    - id
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UserResponse:
+    properties:
+      access_token:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      is_admin:
+        type: boolean
+      refresh_token:
+        type: string
+      refresh_token_expires_at:
+        type: string
+      username:
+        type: string
+    type: object
+  github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact: {}
+  description: Affiliate System API
+  title: Affiliate System API
+  version: "1.0"
+paths:
+  /categories:
+    post:
+      consumes:
+      - application/json
+      description: Create new category in system
+      parameters:
+      - description: CreateCategory request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Category created successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CategoryResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Create category
+      tags:
+      - categories
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete category by ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Category deleted successfully
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Delete category
+      tags:
+      - categories
+    get:
+      consumes:
+      - application/json
+      description: Get category by its unique identifier
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CategoryResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Get category by ID
+      tags:
+      - categories
+    patch:
+      consumes:
+      - application/json
+      description: Update existing category by ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UpdateCategory request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category updated successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CategoryResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Update category
+      tags:
+      - categories
+  /cities:
+    post:
+      consumes:
+      - application/json
+      description: Create new city in system
+      parameters:
+      - description: CreateCity request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CreateCityRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: City created successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CityResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Create city
+      tags:
+      - cities
+  /cities/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete city by ID
+      parameters:
+      - description: City ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: City deleted successfully
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Delete city
+      tags:
+      - cities
+    get:
+      consumes:
+      - application/json
+      description: Get city by its unique identifier
+      parameters:
+      - description: City ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: City found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CityResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Get city by ID
+      tags:
+      - cities
+    patch:
+      consumes:
+      - application/json
+      description: Update existing city by ID
+      parameters:
+      - description: City ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UpdateCity request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateCityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: City updated successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CityResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Update city
+      tags:
+      - cities
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return access and refresh tokens
+      parameters:
+      - description: Login request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.LoginResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Login user
+      tags:
+      - auth
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Invalidate user refresh token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout successful
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Logout user
+      tags:
+      - auth
+  /partners:
+    post:
+      consumes:
+      - application/json
+      description: Create new partner in system
+      parameters:
+      - description: CreatePartner request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CreatePartnerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Partner created successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.PartnerResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Create partner
+      tags:
+      - partners
+  /partners/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete partner by ID
+      parameters:
+      - description: Partner ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Partner deleted successfully
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Delete partner
+      tags:
+      - partners
+    get:
+      consumes:
+      - application/json
+      description: Get partner by its unique identifier
+      parameters:
+      - description: Partner ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Partner found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.PartnerResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Get partner by ID
+      tags:
+      - partners
+    patch:
+      consumes:
+      - application/json
+      description: Update existing partner by ID
+      parameters:
+      - description: Partner ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UpdatePartner request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdatePartnerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Partner updated successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.PartnerResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Update partner
+      tags:
+      - partners
+  /refresh_token:
+    post:
+      consumes:
+      - application/json
+      description: Refresh access token using refresh token
+      parameters:
+      - description: RefreshToken request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token refreshed successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.RefreshTokenResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Refresh access token
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user in the system
+      parameters:
+      - description: Register request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User registered successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.RegisterResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Register user
+      tags:
+      - auth
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Create new user in system
+      parameters:
+      - description: CreateUser request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Create user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: User deleted successfully
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Delete user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get user by its unique identifier
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Get user by ID
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Update existing user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UpdateUser request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User updated successfully
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      summary: Update user
+      tags:
+      - users
+swagger: "2.0"
