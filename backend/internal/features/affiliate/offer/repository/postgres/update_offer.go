@@ -13,6 +13,7 @@ import (
 
 func (r *OfferRepository) UpdateOffer(
 	ctx context.Context,
+	id int,
 	offer core_transport_dto.UpdateOfferRequest,
 ) (domain.Offer, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
@@ -36,7 +37,7 @@ func (r *OfferRepository) UpdateOffer(
 		RETURNING id, partner_id, category_id, city_id, name, description, created_at, expire_at
 	`
 	
-	row := r.pool.QueryRow(ctx, query, offer.ID, offer.Name, offer.Description, offer.ExpireAt)
+	row := r.pool.QueryRow(ctx, query, id, offer.Name, offer.Description, offer.ExpireAt)
 
 	var offerModel core_database_models.OfferModel
 	err := row.Scan(
@@ -51,7 +52,7 @@ func (r *OfferRepository) UpdateOffer(
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return domain.Offer{}, fmt.Errorf("offer with id %d not found", offer.ID)
+			return domain.Offer{}, fmt.Errorf("offer with id %d not found", id)
 		}
 		return domain.Offer{}, fmt.Errorf("update error: %w", err)
 	}

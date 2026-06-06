@@ -24,6 +24,7 @@ type CityRepository interface {
 
 	UpdateCity(
 		ctx context.Context,
+		id int,
 		city core_transport_dto.UpdateCityRequest,
 	) (domain.City, error)
 

@@ -62,10 +62,9 @@ func (h *CityHTTPHandler) UpdateCity(rw http.ResponseWriter, r *http.Request) {
 		responseHandler.ErrorResponse(err, "failed to decode and validate HTTP request")
 		return
 	}
-	request.ID = cityID
 
 	// Update city
-	city, err := h.cityService.UpdateCity(ctx, request)
+	city, err := h.cityService.UpdateCity(ctx, cityID, request)
 	if err != nil {
 		responseHandler.ErrorResponse(err, "failed to update city")
 		return

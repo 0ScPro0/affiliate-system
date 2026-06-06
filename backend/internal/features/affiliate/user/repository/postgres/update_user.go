@@ -13,6 +13,7 @@ import (
 
 func (r *UserRepository) UpdateUser(
 	ctx context.Context,
+	id int,
 	user core_transport_dto.UpdateUserRequest,
 ) (domain.User, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
@@ -41,7 +42,7 @@ func (r *UserRepository) UpdateUser(
 		          refresh_token, refresh_token_expires_at
 	`
 
-	row := r.pool.QueryRow(ctx, query, user.ID, user.UserName, user.Email, user.PasswordHash, user.IsAdmin)
+	row := r.pool.QueryRow(ctx, query, id, user.UserName, user.Email, user.PasswordHash, user.IsAdmin)
 
 	var userModel core_database_models.UserModel
 	err := row.Scan(
@@ -56,7 +57,7 @@ func (r *UserRepository) UpdateUser(
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return domain.User{}, fmt.Errorf("user with id %d not found", user.ID)
+			return domain.User{}, fmt.Errorf("user with id %d not found", id)
 		}
 		return domain.User{}, fmt.Errorf("update user error: %w", err)
 	}

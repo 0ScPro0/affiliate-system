@@ -26,6 +26,7 @@ type UserService interface {
 
 	UpdateUser(
 		ctx context.Context,
+		id int,
 		user core_transport_dto.UpdateUserRequest,
 	) (domain.User, error)
 

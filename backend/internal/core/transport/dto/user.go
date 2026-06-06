@@ -43,7 +43,6 @@ func (r *CreateUserRequest) Validate() error {
 }
 
 type UpdateUserRequest struct {
-	ID           int     `json:"id" validate:"required"`
 	UserName     *string `json:"username" validate:"omitempty,min=1,max=50"`
 	Email        *string `json:"email" validate:"omitempty,email,max=100"`
 	PasswordHash *string `json:"password_hash" validate:"omitempty,min=1,max=255"`
@@ -51,10 +50,6 @@ type UpdateUserRequest struct {
 }
 
 func (r *UpdateUserRequest) Validate() error {
-	if r.ID <= 0 {
-		return fmt.Errorf("invalid `ID`: %d: %w", r.ID, core_errors.ErrInvalidArgument)
-	}
-
 	if r.UserName != nil {
 		if !core_utils.ValidateStringLen(*r.UserName, 1, 50) {
 			return fmt.Errorf(

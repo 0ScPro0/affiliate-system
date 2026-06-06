@@ -13,6 +13,7 @@ import (
 
 func (r *CategoryRepository) UpdateCategory(
 	ctx context.Context,
+	id int,
 	category core_transport_dto.UpdateCategoryRequest,
 ) (domain.Category, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
@@ -32,7 +33,7 @@ func (r *CategoryRepository) UpdateCategory(
 		RETURNING id, name, description, created_at
 	`
 	
-	row := r.pool.QueryRow(ctx, query, category.ID, category.Name, category.Description)
+	row := r.pool.QueryRow(ctx, query, id, category.Name, category.Description)
 
 	var categoryModel core_database_models.CategoryModel
 	err := row.Scan(
@@ -43,7 +44,7 @@ func (r *CategoryRepository) UpdateCategory(
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return domain.Category{}, fmt.Errorf("category with id %d not found", category.ID)
+			return domain.Category{}, fmt.Errorf("category with id %d not found", id)
 		}
 		return domain.Category{}, fmt.Errorf("update error: %w", err)
 	}

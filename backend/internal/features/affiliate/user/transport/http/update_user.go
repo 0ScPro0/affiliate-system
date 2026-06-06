@@ -62,10 +62,9 @@ func (h *UserHTTPHandler) UpdateUser(rw http.ResponseWriter, r *http.Request) {
 		responseHandler.ErrorResponse(err, "failed to decode and validate HTTP request")
 		return
 	}
-	request.ID = userID
 
 	// Update user
-	updatedUser, err := h.userService.UpdateUser(ctx, request)
+	updatedUser, err := h.userService.UpdateUser(ctx, userID, request)
 	if err != nil {
 		responseHandler.ErrorResponse(err, "failed to update user")
 		return

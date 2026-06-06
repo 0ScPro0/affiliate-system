@@ -10,13 +10,14 @@ import (
 
 func (s *CityService) UpdateCity(
 	ctx context.Context,
+	id int,
 	city core_transport_dto.UpdateCityRequest,
 ) (domain.City, error) {
 	if err := city.Validate(); err != nil {
 		return domain.City{}, fmt.Errorf("validate update city request: %w", err)
 	}
 
-	domainCity, err := s.cityRepository.UpdateCity(ctx, city)
+	domainCity, err := s.cityRepository.UpdateCity(ctx, id, city)
 	if err != nil {
 		return domain.City{}, fmt.Errorf("update city: %w", err)
 	}

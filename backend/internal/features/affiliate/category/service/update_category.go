@@ -10,13 +10,14 @@ import (
 
 func (s *CategoryService) UpdateCategory(
 	ctx context.Context,
+	id int,
 	category core_transport_dto.UpdateCategoryRequest,
 ) (domain.Category, error) {
 	if err := category.Validate(); err != nil {
 		return domain.Category{}, fmt.Errorf("validate update category request: %w", err)
 	}
 
-	domainCategory, err := s.categoryRepository.UpdateCategory(ctx, category)
+	domainCategory, err := s.categoryRepository.UpdateCategory(ctx, id, category)
 	if err != nil {
 		return domain.Category{}, fmt.Errorf("update category: %w", err)
 	}

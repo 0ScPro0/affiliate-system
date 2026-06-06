@@ -10,13 +10,14 @@ import (
 
 func (s *UserService) UpdateUser(
 	ctx context.Context,
+	id int,
 	user core_transport_dto.UpdateUserRequest,
 ) (domain.User, error) {
 	if err := user.Validate(); err != nil {
 		return domain.User{}, fmt.Errorf("validate update user request: %w", err)
 	}
 
-	domainUser, err := s.userRepository.UpdateUser(ctx, user)
+	domainUser, err := s.userRepository.UpdateUser(ctx, id, user)
 	if err != nil {
 		return domain.User{}, fmt.Errorf("update user: %w", err)
 	}

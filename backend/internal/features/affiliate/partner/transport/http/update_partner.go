@@ -62,10 +62,9 @@ func (h *PartnerHTTPHandler) UpdatePartner(rw http.ResponseWriter, r *http.Reque
 		responseHandler.ErrorResponse(err, "failed to decode and validate HTTP request")
 		return
 	}
-	request.ID = partnerID
 
 	// Update partner
-	partner, err := h.partnerService.UpdatePartner(ctx, request)
+	partner, err := h.partnerService.UpdatePartner(ctx, partnerID, request)
 	if err != nil {
 		responseHandler.ErrorResponse(err, "failed to update partner")
 		return

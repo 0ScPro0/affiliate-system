@@ -10,13 +10,14 @@ import (
 
 func (s *PartnerService) UpdatePartner(
 	ctx context.Context,
+	id int,
 	partner core_transport_dto.UpdatePartnerRequest,
 ) (domain.Partner, error) {
 	if err := partner.Validate(); err != nil {
 		return domain.Partner{}, fmt.Errorf("validate update partner request: %w", err)
 	}
 
-	domainPartner, err := s.partnerRepository.UpdatePartner(ctx, partner)
+	domainPartner, err := s.partnerRepository.UpdatePartner(ctx, id, partner)
 	if err != nil {
 		return domain.Partner{}, fmt.Errorf("update partner: %w", err)
 	}

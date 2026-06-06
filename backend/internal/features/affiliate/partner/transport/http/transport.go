@@ -26,6 +26,7 @@ type PartnerService interface {
 
 	UpdatePartner(
 		ctx context.Context,
+		id int,
 		partner core_transport_dto.UpdatePartnerRequest,
 	) (domain.Partner, error)
 

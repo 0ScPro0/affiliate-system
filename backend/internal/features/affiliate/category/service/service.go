@@ -24,6 +24,7 @@ type CategoryRepository interface {
 
 	UpdateCategory(
 		ctx context.Context,
+		id int,
 		category core_transport_dto.UpdateCategoryRequest,
 	) (domain.Category, error)
 

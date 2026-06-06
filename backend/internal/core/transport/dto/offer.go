@@ -56,17 +56,12 @@ func (r *CreateOfferRequest) Validate() error {
 }
 
 type UpdateOfferRequest struct {
-	ID          int        `json:"id" validate:"required"`
 	Name        *string    `json:"name" validate:"omitempty,min=1,max=100"`
 	Description *string    `json:"description" validate:"omitempty,min=1,max=1000"`
 	ExpireAt    *time.Time `json:"expire_at" validate:"omitempty"`
 }
 
 func (r *UpdateOfferRequest) Validate() error {
-	if r.ID <= 0 {
-		return fmt.Errorf("invalid `ID`: %d: %w", r.ID, core_errors.ErrInvalidArgument)
-	}
-
 	if r.Name != nil {
 		if !core_utils.ValidateStringLen(*r.Name, 1, 100) {
 			return fmt.Errorf(

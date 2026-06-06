@@ -13,6 +13,7 @@ import (
 
 func (r *PartnerRepository) UpdatePartner(
 	ctx context.Context,
+	id int,
 	partner core_transport_dto.UpdatePartnerRequest,
 ) (domain.Partner, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
@@ -32,7 +33,7 @@ func (r *PartnerRepository) UpdatePartner(
 		RETURNING id, name, description, created_at
 	`
 	
-	row := r.pool.QueryRow(ctx, query, partner.ID, partner.Name, partner.Description)
+	row := r.pool.QueryRow(ctx, query, id, partner.Name, partner.Description)
 
 	var partnerModel core_database_models.PartnerModel
 	err := row.Scan(
@@ -43,7 +44,7 @@ func (r *PartnerRepository) UpdatePartner(
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return domain.Partner{}, fmt.Errorf("partner with id %d not found", partner.ID)
+			return domain.Partner{}, fmt.Errorf("partner with id %d not found", id)
 		}
 		return domain.Partner{}, fmt.Errorf("update error: %w", err)
 	}

@@ -10,13 +10,14 @@ import (
 
 func (s *OfferService) UpdateOffer(
 	ctx context.Context,
+	id int,
 	offer core_transport_dto.UpdateOfferRequest,
 ) (domain.Offer, error) {
 	if err := offer.Validate(); err != nil {
 		return domain.Offer{}, fmt.Errorf("validate update offer request: %w", err)
 	}
 
-	domainOffer, err := s.offerRepository.UpdateOffer(ctx, offer)
+	domainOffer, err := s.offerRepository.UpdateOffer(ctx, id, offer)
 	if err != nil {
 		return domain.Offer{}, fmt.Errorf("update offer: %w", err)
 	}

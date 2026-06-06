@@ -13,6 +13,7 @@ import (
 
 func (r *CityRepository) UpdateCity(
 	ctx context.Context,
+	id int,
 	city core_transport_dto.UpdateCityRequest,
 ) (domain.City, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.pool.OperationTimeout())
@@ -28,7 +29,7 @@ func (r *CityRepository) UpdateCity(
 		RETURNING id, name, created_at
 	`
 	
-	row := r.pool.QueryRow(ctx, query, city.ID, city.Name)
+	row := r.pool.QueryRow(ctx, query, id, city.Name)
 
 	var cityModel core_database_models.CityModel
 	err := row.Scan(
@@ -38,7 +39,7 @@ func (r *CityRepository) UpdateCity(
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return domain.City{}, fmt.Errorf("city with id %d not found", city.ID)
+			return domain.City{}, fmt.Errorf("city with id %d not found", id)
 		}
 		return domain.City{}, fmt.Errorf("update error: %w", err)
 	}

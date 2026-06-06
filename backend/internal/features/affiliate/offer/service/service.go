@@ -24,7 +24,8 @@ type OfferRepository interface {
 
 	UpdateOffer(
 		ctx context.Context,
-		offer core_transport_dto.UpdateOfferRequest,
+		id int,
+		ffer core_transport_dto.UpdateOfferRequest,
 	) (domain.Offer, error)
 
 	DeleteOffer(

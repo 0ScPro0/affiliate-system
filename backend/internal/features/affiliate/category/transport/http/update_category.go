@@ -62,10 +62,9 @@ func (h *CategoryHTTPHandler) UpdateCategory(rw http.ResponseWriter, r *http.Req
 		responseHandler.ErrorResponse(err, "failed to decode and validate HTTP request")
 		return
 	}
-	request.ID = categoryID
 
 	// Update category
-	category, err := h.categoryService.UpdateCategory(ctx, request)
+	category, err := h.categoryService.UpdateCategory(ctx, categoryID, request)
 	if err != nil {
 		responseHandler.ErrorResponse(err, "failed to update category")
 		return
