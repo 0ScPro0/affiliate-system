@@ -3,6 +3,7 @@
 backend/out
 backend/logs
 backend/server.exe
+backend/test_credentials.json
 .gocache
 
 frontend/.DS_Store
