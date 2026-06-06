@@ -161,25 +161,17 @@ definitions:
         maxLength: 1000
         minLength: 1
         type: string
-      id:
-        type: integer
       name:
         maxLength: 100
         minLength: 1
         type: string
-    required:
-    - id
     type: object
   github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateCityRequest:
     properties:
-      id:
-        type: integer
       name:
         maxLength: 50
         minLength: 1
         type: string
-    required:
-    - id
     type: object
   github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdatePartnerRequest:
     properties:
@@ -187,14 +179,11 @@ definitions:
         maxLength: 1000
         minLength: 1
         type: string
-      id:
-        type: integer
       name:
         maxLength: 100
         minLength: 1
         type: string
     required:
-    - id
     - name
     type: object
   github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateUserRequest:
@@ -202,8 +191,6 @@ definitions:
       email:
         maxLength: 100
         type: string
-      id:
-        type: integer
       is_admin:
         type: boolean
       password_hash:
@@ -214,8 +201,6 @@ definitions:
         maxLength: 50
         minLength: 1
         type: string
-    required:
-    - id
     type: object
   github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UserResponse:
     properties:

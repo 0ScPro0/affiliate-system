@@ -1459,17 +1459,11 @@ const docTemplate = `{
         },
         "github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateCategoryRequest": {
             "type": "object",
-            "required": [
-                "id"
-            ],
             "properties": {
                 "description": {
                     "type": "string",
                     "maxLength": 1000,
                     "minLength": 1
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "name": {
                     "type": "string",
@@ -1480,13 +1474,7 @@ const docTemplate = `{
         },
         "github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateCityRequest": {
             "type": "object",
-            "required": [
-                "id"
-            ],
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
                 "name": {
                     "type": "string",
                     "maxLength": 50,
@@ -1497,7 +1485,6 @@ const docTemplate = `{
         "github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdatePartnerRequest": {
             "type": "object",
             "required": [
-                "id",
                 "name"
             ],
             "properties": {
@@ -1505,9 +1492,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 1000,
                     "minLength": 1
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "name": {
                     "type": "string",
@@ -1518,16 +1502,10 @@ const docTemplate = `{
         },
         "github_com_0ScPro0_affiliate-system_internal_core_transport_dto.UpdateUserRequest": {
             "type": "object",
-            "required": [
-                "id"
-            ],
             "properties": {
                 "email": {
                     "type": "string",
                     "maxLength": 100
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "is_admin": {
                     "type": "boolean"
