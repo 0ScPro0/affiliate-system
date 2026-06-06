@@ -60,5 +60,5 @@ func (h *UserHTTPHandler) DeleteUser(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	// Response
-	responseHandler.JSONResponse(nil, http.StatusNoContent)
+	responseHandler.NoContentResponse()
 }

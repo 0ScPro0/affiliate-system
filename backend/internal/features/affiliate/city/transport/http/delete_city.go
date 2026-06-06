@@ -60,5 +60,5 @@ func (h *CityHTTPHandler) DeleteCity(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	// Response
-	responseHandler.JSONResponse(nil, http.StatusNoContent)
+	responseHandler.NoContentResponse()
 }

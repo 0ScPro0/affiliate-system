@@ -60,5 +60,5 @@ func (h *PartnerHTTPHandler) DeletePartner(rw http.ResponseWriter, r *http.Reque
 	}
 
 	// Response
-	responseHandler.JSONResponse(nil, http.StatusNoContent)
+	responseHandler.NoContentResponse()
 }

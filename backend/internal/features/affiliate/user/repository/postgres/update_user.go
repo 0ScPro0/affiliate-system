@@ -21,22 +21,10 @@ func (r *UserRepository) UpdateUser(
 
 	query := `
 		UPDATE affiliate_system.users
-		SET username = CASE 
-			WHEN $2 IS NOT NULL THEN $2 
-			ELSE username 
-		END,
-		email = CASE 
-			WHEN $3 IS NOT NULL AND $3 != '' THEN $3 
-			ELSE email 
-		END,
-		password_hash = CASE 
-			WHEN $4 IS NOT NULL AND $4 != '' THEN $4 
-			ELSE password_hash 
-		END,
-		is_admin = CASE 
-			WHEN $5 IS NOT NULL THEN $5 
-			ELSE is_admin 
-		END
+		SET username = COALESCE(NULLIF($2, ''), username),
+			email = COALESCE(NULLIF($3, ''), email),
+			password_hash = COALESCE(NULLIF($4, ''), password_hash),
+			is_admin = COALESCE(NULLIF($5, ''), is_admin),
 		WHERE id = $1
 		RETURNING id, username, email, password_hash, is_admin, created_at,
 		          refresh_token, refresh_token_expires_at

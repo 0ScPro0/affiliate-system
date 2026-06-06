@@ -21,10 +21,7 @@ func (r *CityRepository) UpdateCity(
 	
 	query := `
 		UPDATE affiliate_system.cities
-		SET name = CASE 
-			WHEN $2 IS NOT NULL AND $2 != '' THEN $2 
-			ELSE name 
-		END
+		SET name = COALESCE(NULLIF($2, ''), name)
 		WHERE id = $1
 		RETURNING id, name, created_at
 	`

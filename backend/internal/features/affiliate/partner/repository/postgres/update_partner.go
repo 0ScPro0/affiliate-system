@@ -21,13 +21,8 @@ func (r *PartnerRepository) UpdatePartner(
 	
 	query := `
 		UPDATE affiliate_system.partners
-		SET name = CASE 
-			WHEN $2 IS NOT NULL AND $2 != '' THEN $2 
-			ELSE name 
-		END,
-		description = CASE 
-			WHEN $3 IS NOT NULL THEN $3 
-			ELSE description 
+		SET name = COALESCE(NULLIF($2, ''), name),
+			description = COALESCE(NULLIF($3, ''), description)
 		END
 		WHERE id = $1
 		RETURNING id, name, description, created_at

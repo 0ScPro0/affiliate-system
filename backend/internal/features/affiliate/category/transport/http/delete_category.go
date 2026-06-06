@@ -60,5 +60,5 @@ func (h *CategoryHTTPHandler) DeleteCategory(rw http.ResponseWriter, r *http.Req
 	}
 
 	// Response
-	responseHandler.JSONResponse(nil, http.StatusNoContent)
+	responseHandler.NoContentResponse()
 }

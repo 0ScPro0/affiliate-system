@@ -21,14 +21,8 @@ func (r *CategoryRepository) UpdateCategory(
 	
 	query := `
 		UPDATE affiliate_system.categories
-		SET name = CASE 
-			WHEN $2 IS NOT NULL AND $2 != '' THEN $2 
-			ELSE name 
-		END,
-		description = CASE 
-			WHEN $3 IS NOT NULL AND $3 != '' THEN $3 
-			ELSE description 
-		END
+		SET name = COALESCE(NULLIF($2, ''), name),
+			description = COALESCE(NULLIF($3, ''), description)
 		WHERE id = $1
 		RETURNING id, name, description, created_at
 	`

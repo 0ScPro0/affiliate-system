@@ -21,18 +21,9 @@ func (r *OfferRepository) UpdateOffer(
 	
 	query := `
 		UPDATE affiliate_system.offers
-		SET name = CASE 
-			WHEN $2 IS NOT NULL AND $2 != '' THEN $2 
-			ELSE name 
-		END,
-		description = CASE 
-			WHEN $3 IS NOT NULL THEN $3 
-			ELSE description 
-		END,
-		expire_at = CASE 
-			WHEN $4 IS NOT NULL THEN $4 
-			ELSE expire_at 
-		END
+		SET name = COALESCE(NULLIF($2, ''), name),
+			description = description = COALESCE(NULLIF($3, ''), description),
+			expire_at = COALESCE(NULLIF($4, ''), expire_at)
 		WHERE id = $1
 		RETURNING id, partner_id, category_id, city_id, name, description, created_at, expire_at
 	`
