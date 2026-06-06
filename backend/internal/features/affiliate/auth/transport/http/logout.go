@@ -18,6 +18,7 @@ import (
 // @Success 200 {string} string "Logout successful"
 // @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
 // @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Security BearerAuth
 // @Router /logout [post]
 func (h *AuthHTTPHandler) Logout(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
@@ -32,7 +33,7 @@ func (h *AuthHTTPHandler) Logout(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get user id from claims (stored as float64 from JWT)
-	userIDFloat, ok := user["id"].(float64)
+	userIDFloat, ok := user["sub"].(float64)
 	if !ok || userIDFloat <= 0 {
 		responseHandler.ErrorResponse(core_errors.ErrNotFound, "user not found")
 		return

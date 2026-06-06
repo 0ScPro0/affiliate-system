@@ -27,7 +27,7 @@ func (s *AuthService) RefreshToken(
 	}
 
 	// Extract user ID from claims
-	userIDFloat, ok := claims["id"].(float64)
+	userIDFloat, ok := claims["sub"].(float64)
 	if !ok {
 		return core_transport_dto.RefreshTokenResponse{}, fmt.Errorf("refresh_token: invalid token claims: %w", core_errors.ErrUnauthorized)
 	}
@@ -51,9 +51,8 @@ func (s *AuthService) RefreshToken(
 
 	// Generate new tokens
 	sub := map[string]any{
-		"id":    user.ID,
-		"email": user.Email,
-		"role":  "user",
+		"sub":      user.ID,
+		"is_admin": user.IsAdmin,
 	}
 
 	accessToken, err := core_security.CreateAccessToken(s.cfg, sub)

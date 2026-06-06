@@ -23,6 +23,7 @@ import (
 // @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
 // @Failure 403 {object} core_http_response.ErrorResponse "Forbidden"
 // @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Security BearerAuth
 // @Router /categories [post]
 func (h *CategoryHTTPHandler) CreateCategory(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()

@@ -23,6 +23,7 @@ import (
 // @Failure 403 {object} core_http_response.ErrorResponse "Forbidden"
 // @Failure 404 {object} core_http_response.ErrorResponse "Not found"
 // @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Security BearerAuth
 // @Router /categories/{id} [delete]
 func (h *CategoryHTTPHandler) DeleteCategory(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()

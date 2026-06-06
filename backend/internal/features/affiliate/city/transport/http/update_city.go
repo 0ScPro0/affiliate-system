@@ -26,6 +26,7 @@ import (
 // @Failure 403 {object} core_http_response.ErrorResponse "Forbidden"
 // @Failure 404 {object} core_http_response.ErrorResponse "Not found"
 // @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Security BearerAuth
 // @Router /cities/{id} [patch]
 func (h *CityHTTPHandler) UpdateCity(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()

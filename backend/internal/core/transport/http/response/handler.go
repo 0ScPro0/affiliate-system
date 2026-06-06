@@ -56,8 +56,6 @@ func (h *HTTPResponseHandler) errorResponse(
 	err error,
 	msg string,
 ) {
-	h.rw.WriteHeader(statusCode)
-
 	response := ErrorResponse{
 		Error: err.Error(),
 		Message: msg,

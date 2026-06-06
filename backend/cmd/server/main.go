@@ -30,11 +30,15 @@ import (
 	_ "github.com/0ScPro0/affiliate-system/docs"
 )
 
-// @title       Affiliate System API
-// @version     1.0
-// @description Affiliate System API
-// @host        127.0.0.1:8080
-// @BasePath    /api/v1/
+// @title           Affiliate System API
+// @version         1.0
+// @description     Affiliate System API
+// @host            127.0.0.1:8080
+// @BasePath        /api/v1/
+// @securityDefinitions.apikey BearerAuth
+// @in                         header
+// @name                       Authorization
+// @description               Type "Bearer " followed by a space and your access token.
 func main() {
 	ctx, cancel := signal.NotifyContext(
 		context.Background(),

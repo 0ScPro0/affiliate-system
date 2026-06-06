@@ -15,8 +15,58 @@ import (
 // contextKey for storing user claims in request context.
 const userClaimsKey = "user_claims"
 
+// protectedEndpoints defines which routes require authentication.
+// The key is "METHOD path" format (path includes /api/v1/ prefix).
+var protectedEndpoints = map[string]bool{
+	// City
+	"POST /api/v1/cities":       true,
+	"PATCH /api/v1/cities/{id}": true,
+	"DELETE /api/v1/cities/{id}": true,
+
+	// Partner
+	"POST /api/v1/partners":       true,
+	"PATCH /api/v1/partners/{id}": true,
+	"DELETE /api/v1/partners/{id}": true,
+
+	// Category
+	"POST /api/v1/categories":       true,
+	"PATCH /api/v1/categories/{id}": true,
+	"DELETE /api/v1/categories/{id}": true,
+
+	// User (all protected)
+	"POST /api/v1/users":       true,
+	"GET /api/v1/users/{id}":   true,
+	"PATCH /api/v1/users/{id}": true,
+	"DELETE /api/v1/users/{id}": true,
+
+	// Auth
+	"POST /api/v1/logout": true,
+}
+
+// isProtected checks if the given method and path match a protected endpoint.
+// It performs an exact match first, then falls back to pattern matching
+// for paths with path parameters (e.g., /api/v1/cities/{id}).
+func isProtected(method, path string) bool {
+	key := method + " " + path
+	if protectedEndpoints[key] {
+		return true
+	}
+
+	// Try pattern matching for paths with {id} parameter.
+	// Split the path into segments and compare against known patterns.
+	segments := strings.Split(strings.Trim(path, "/"), "/")
+	if len(segments) < 3 {
+		return false
+	}
+
+	// Build a pattern key by replacing the last segment with {id}
+	// if it looks like a numeric ID.
+	patternKey := method + " /" + segments[0] + "/" + segments[1] + "/{id}"
+	return protectedEndpoints[patternKey]
+}
+
 // Auth returns a middleware that validates Bearer token from Authorization header
-// and stores the token claims in the request context.
+// for protected endpoints only. Public endpoints are passed through without authentication.
 func Auth(cfg *config.Config) Middleware {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +75,12 @@ func Auth(cfg *config.Config) Middleware {
 
 			// Skip auth for swagger docs (any path starting with /docs)
 			if strings.HasPrefix(r.URL.Path, "/docs") {
+				next.ServeHTTP(w, r)
+				return
+			}
+
+			// Check if the endpoint requires authentication
+			if !isProtected(r.Method, r.URL.Path) {
 				next.ServeHTTP(w, r)
 				return
 			}
@@ -38,16 +94,14 @@ func Auth(cfg *config.Config) Middleware {
 				return
 			}
 
+			var tokenString string
 			parts := strings.SplitN(authHeader, " ", 2)
-			if len(parts) != 2 || !strings.EqualFold(parts[0], "Bearer") {
-				responseHandler.ErrorResponse(
-					core_errors.ErrUnauthorized,
-					"invalid Authorization header format, expected 'Bearer <token>'",
-				)
-				return
+			if len(parts) == 2 && strings.EqualFold(parts[0], "Bearer") {
+				tokenString = parts[1]
+			} else {
+				// If no "Bearer" prefix, treat the entire header value as the token
+				tokenString = authHeader
 			}
-
-			tokenString := parts[1]
 
 			claims, err := core_security.VerifyToken(cfg, tokenString)
 			if err != nil {

@@ -285,6 +285,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Create category
       tags:
       - categories
@@ -324,6 +326,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Delete category
       tags:
       - categories
@@ -402,6 +406,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Update category
       tags:
       - categories
@@ -440,6 +446,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Create city
       tags:
       - cities
@@ -479,6 +487,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Delete city
       tags:
       - cities
@@ -557,6 +567,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Update city
       tags:
       - cities
@@ -614,6 +626,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Logout user
       tags:
       - auth
@@ -652,6 +666,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Create partner
       tags:
       - partners
@@ -691,6 +707,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Delete partner
       tags:
       - partners
@@ -769,6 +787,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Update partner
       tags:
       - partners
@@ -875,6 +895,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Create user
       tags:
       - users
@@ -914,6 +936,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Delete user
       tags:
       - users
@@ -954,6 +978,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Get user by ID
       tags:
       - users
@@ -1000,7 +1026,15 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/github_com_0ScPro0_affiliate-system_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
       summary: Update user
       tags:
       - users
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer " followed by a space and your access token.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

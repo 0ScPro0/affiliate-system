@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/categories": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new category in system",
                 "consumes": [
                     "application/json"
@@ -123,6 +128,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete category by ID",
                 "consumes": [
                     "application/json"
@@ -180,6 +190,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing category by ID",
                 "consumes": [
                     "application/json"
@@ -251,6 +266,11 @@ const docTemplate = `{
         },
         "/cities": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new city in system",
                 "consumes": [
                     "application/json"
@@ -357,6 +377,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete city by ID",
                 "consumes": [
                     "application/json"
@@ -414,6 +439,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing city by ID",
                 "consumes": [
                     "application/json"
@@ -537,6 +567,11 @@ const docTemplate = `{
         },
         "/logout": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Invalidate user refresh token",
                 "consumes": [
                     "application/json"
@@ -572,6 +607,11 @@ const docTemplate = `{
         },
         "/partners": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new partner in system",
                 "consumes": [
                     "application/json"
@@ -678,6 +718,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete partner by ID",
                 "consumes": [
                     "application/json"
@@ -735,6 +780,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing partner by ID",
                 "consumes": [
                     "application/json"
@@ -910,6 +960,11 @@ const docTemplate = `{
         },
         "/users": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new user in system",
                 "consumes": [
                     "application/json"
@@ -968,6 +1023,11 @@ const docTemplate = `{
         },
         "/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get user by its unique identifier",
                 "consumes": [
                     "application/json"
@@ -1028,6 +1088,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete user by ID",
                 "consumes": [
                     "application/json"
@@ -1085,6 +1150,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing user by ID",
                 "consumes": [
                     "application/json"
@@ -1513,6 +1583,14 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Type \"Bearer \" followed by a space and your access token.",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

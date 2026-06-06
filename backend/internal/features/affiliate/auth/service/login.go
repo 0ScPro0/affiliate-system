@@ -29,9 +29,8 @@ func (s *AuthService) Login(
 	}
 
 	sub := map[string]any{
-		"id":    user.ID,
-		"email": user.Email,
-		"role":  "user",
+		"sub":      user.ID,
+		"is_admin": user.IsAdmin,
 	}
 
 	accessToken, err := core_security.CreateAccessToken(s.cfg, sub)

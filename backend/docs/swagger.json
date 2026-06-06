@@ -11,6 +11,11 @@
     "paths": {
         "/categories": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new category in system",
                 "consumes": [
                     "application/json"
@@ -117,6 +122,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete category by ID",
                 "consumes": [
                     "application/json"
@@ -174,6 +184,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing category by ID",
                 "consumes": [
                     "application/json"
@@ -245,6 +260,11 @@
         },
         "/cities": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new city in system",
                 "consumes": [
                     "application/json"
@@ -351,6 +371,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete city by ID",
                 "consumes": [
                     "application/json"
@@ -408,6 +433,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing city by ID",
                 "consumes": [
                     "application/json"
@@ -531,6 +561,11 @@
         },
         "/logout": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Invalidate user refresh token",
                 "consumes": [
                     "application/json"
@@ -566,6 +601,11 @@
         },
         "/partners": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new partner in system",
                 "consumes": [
                     "application/json"
@@ -672,6 +712,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete partner by ID",
                 "consumes": [
                     "application/json"
@@ -729,6 +774,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing partner by ID",
                 "consumes": [
                     "application/json"
@@ -904,6 +954,11 @@
         },
         "/users": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new user in system",
                 "consumes": [
                     "application/json"
@@ -962,6 +1017,11 @@
         },
         "/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get user by its unique identifier",
                 "consumes": [
                     "application/json"
@@ -1022,6 +1082,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete user by ID",
                 "consumes": [
                     "application/json"
@@ -1079,6 +1144,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing user by ID",
                 "consumes": [
                     "application/json"
@@ -1507,6 +1577,14 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Type \"Bearer \" followed by a space and your access token.",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
