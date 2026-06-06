@@ -55,15 +55,15 @@ func isProtected(method, path string) bool {
 	// Try pattern matching for paths with {id} parameter.
 	// Split the path into segments and compare against known patterns.
 	segments := strings.Split(strings.Trim(path, "/"), "/")
-	if len(segments) < 3 {
+	if len(segments) < 4 {
 		return false
 	}
 
 	// Build a pattern key by replacing the last segment with {id}
 	// if it looks like a numeric ID.
-	patternKey := method + " /" + segments[0] + "/" + segments[1] + "/{id}"
-	return protectedEndpoints[patternKey]
-}
+	key = method + " /" + segments[0] + "/" + segments[1] + "/" + segments[2] + "/{id}"
+	return protectedEndpoints[key]
+} 
 
 // Auth returns a middleware that validates Bearer token from Authorization header
 // for protected endpoints only. Public endpoints are passed through without authentication.
