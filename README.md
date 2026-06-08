@@ -27,110 +27,291 @@
 ### 1. Архитектура бекэнда:
 
 ```bash
-cmd/
-├── server/
-│   └── main.go                 # HTTP сервер (CRUD + API для событий)
-└── consumer/
-    └── main.go                 # Kafka consumer (отдельный процесс)
-
-internal/
-├── core/                       # Общая инфраструктура
-│   ├── config/                 # Конфигурация (env + yaml)
-│   ├── database/               # Подключение к Postgres (pgx/sqlx)
-│   ├── domain/                 # Общие доменные типы (если есть)
-│   ├── errors/                 # Кастомные ошибки
-│   ├── logger/                 # Логирование (slog/logrus)
-│   └── transport/
-│       ├── http/               # HTTP клиент/сервер (если нужен)
-│       │   ├── middleware/     # CORS, logging, recovery
-│       │   └── response/       # Стандартные ответы API
-│       └── kafka/              # Общие Kafka компоненты
-│           ├── consumer.go     # Базовый consumer (обёртка)
-│           ├── producer.go     # Базовый producer (на всякий случай)
-│           └── types.go        # Общие типы для Kafka сообщений
-
-├── features/                   # Бизнес-фичи
-│   ├── affiliate/              # Основная фича (партнёры, категории, офферы)
-│   │   ├── service/            # Бизнес-логика
-│   │   │   ├── partner.go
-│   │   │   ├── category.go
-│   │   │   └── offer.go
-│   │   ├── repository/         # Работа с БД (CRUD)
-│   │   │   ├── partner.go
-│   │   │   ├── category.go
-│   │   │   └── offer.go
-│   │   ├── handler/            # HTTP handlers
-│   │   │   ├── partner.go
-│   │   │   ├── category.go
-│   │   │   └── offer.go
-│   │   ├── models/             # DTO/Entity (можно вынести в domain)
-│   │   │   ├── partner.go
-│   │   │   ├── category.go
-│   │   │   └── offer.go
-│   │   └── routes.go           # Регистрация роутов для этой фичи
+backend/
+├── cmd/
+│   ├── server/
+│   │   └── main.go                 # HTTP сервер (точка входа)
+│   └── consumer/
+│       └── main.go                 # Kafka consumer (отдельный процесс, заглушка)
+│
+├── internal/
+│   ├── core/                       # Общая инфраструктура
+│   │   ├── config/
+│   │   │   ├── config.go           # Конфигурация (env variables)
+│   │   │   └── wal-config.yml      # Конфигурация для WAL-listener
+│   │   │
+│   │   ├── database/
+│   │   │   ├── models/             # Модели БД (CategoryModel, CityModel, OfferModel, PartnerModel, UserModel)
+│   │   │   └── postgres/pool/
+│   │   │       └── pool.go         # Пул соединений к PostgreSQL (pgx)
+│   │   │
+│   │   ├── domain/
+│   │   │   ├── entity/             # Доменные сущности (Category, City, Offer, Partner, User)
+│   │   │   └── event/              # Доменные события (DomainEvent interface)
+│   │   │       ├── events.go       # Базовый интерфейс и структура событий
+│   │   │       ├── category/       # События категорий (created, updated, deleted)
+│   │   │       ├── city/           # События городов (created, updated, deleted)
+│   │   │       ├── offer/          # События предложений (created, updated, deleted)
+│   │   │       ├── partner/        # События партнеров (created, updated, deleted)
+│   │   │       └── user/           # События пользователей (created, updated, deleted)
+│   │   │
+│   │   ├── errors/
+│   │   │   └── common.go           # Кастомные ошибки (ErrNotFound, ErrInvalidArgument, ErrConflict, ErrUnauthorized, ErrForbidden)
+│   │   │
+│   │   ├── logger/
+│   │   │   └── logger.go           # Логирование (zap, console + file)
+│   │   │
+│   │   ├── security/
+│   │   │   ├── jwt.go              # JWT токены (access + refresh)
+│   │   │   └── password.go         # Хеширование паролей (bcrypt)
+│   │   │
+│   │   ├── transport/
+│   │   │   ├── dto/                # DTO для запросов/ответов (auth, category, city, offer, partner, user)
+│   │   │   └── http/
+│   │   │       ├── middleware/
+│   │   │       │   ├── middleware.go   # Middleware chain
+│   │   │       │   ├── auth.go         # JWT аутентификация
+│   │   │       │   └── common.go       # CORS, RequestID, Logger, Panic, Trace
+│   │   │       ├── request/
+│   │   │       │   └── decode.go       # Декодирование и валидация JSON запросов
+│   │   │       ├── response/
+│   │   │       │   ├── handler.go      # Обработчик HTTP ответов
+│   │   │       │   ├── writer.go       # Обертка ResponseWriter
+│   │   │       │   └── errors.go       # Структура ErrorResponse
+│   │   │       └── server/
+│   │   │           ├── server.go       # HTTP сервер (запуск, graceful shutdown)
+│   │   │           ├── router.go       # APIVersionRouter (v1, v2, v3)
+│   │   │           └── route.go        # Структура Route
+│   │   │
+│   │   └── utils/
+│   │       ├── string.go           # Утилиты для строк
+│   │       └── validate.go         # Валидация длины строк
 │   │
-│   └── events/                 # Для работы с событиями из Kafka
-│       ├── service/            # Бизнес-логика обработки событий
-│       │   └── event_processor.go
-│       ├── repository/         # Работа с event_log таблицей
-│       │   └── event.go
-│       ├── handler/            # HTTP handlers для отдачи событий UI
-│       │   └── event.go
-│       ├── consumer/           # Специфичный consumer для этой фичи
-│       │   └── wal_handler.go  # Обработка сообщений от wal-listener
-│       ├── models/             # Модели событий
-│       │   └── event.go
-│       └── routes.go           # Регистрация /api/events
-
-pkg/                            # Переиспользуемые пакеты (можно вынести в отдельные репозитории)
-├── kafka/                      # Если нужно вынести общую логику Kafka
-└── postgres/                   # Хелперы для Postgres
-
-migrations/                     # SQL миграции
-├── 001_create_schemas.up.sql
-├── 001_create_schemas.down.sql
-├── 002_create_event_log.up.sql
-└── 002_create_event_log.down.sql
-
-configs/
-├── config.yaml                 # Основной конфиг
-├── wal-listener.yaml           # Конфиг для wal-listener
-└── .env.example                # Пример env переменных
-
-docker-compose.yml
-Makefile                        # Упрощение команд (make up, make migrate, etc.)
-go.mod
-go.sum
-README.md
+│   └── features/                   # Бизнес-фичи
+│       └── affiliate/
+│           ├── auth/               # Аутентификация (register, login, logout, refresh_token)
+│           │   ├── service/
+│           │   └── transport/http/
+│           │
+│           ├── category/           # CRUD категорий
+│           │   ├── repository/postgres/
+│           │   ├── service/
+│           │   └── transport/http/
+│           │
+│           ├── city/               # CRUD городов
+│           │   ├── repository/postgres/
+│           │   ├── service/
+│           │   └── transport/http/
+│           │
+│           ├── offer/              # CRUD предложений (репозиторий + сервис есть, HTTP транспорт отсутствует)
+│           │   ├── repository/postgres/
+│           │   ├── service/
+│           │   └── transport/      # пусто
+│           │
+│           ├── partner/            # CRUD партнеров
+│           │   ├── repository/postgres/
+│           │   ├── service/
+│           │   └── transport/http/
+│           │
+│           └── user/               # CRUD пользователей
+│               ├── repository/postgres/
+│               ├── service/
+│               └── transport/http/
+│
+├── docs/                           # Swagger документация (автогенерация)
+│   ├── docs.go
+│   ├── swagger.json
+│   └── swagger.yaml
+│
+├── migrations/                     # SQL миграции
+│   ├── 000001_init.up/down.sql         # Создание схемы и таблиц (users, partners, categories, cities, offers)
+│   ├── 000002_db_event.up/down.sql     # Таблица event_log для отслеживания изменений
+│   ├── 000003_make_username_optional.up/down.sql  # username стал опциональным
+│   ├── 000004_make_users_fields_unique.up/down.sql # UNIQUE constraints на email и password_hash
+│   └── 000005_refresh_tokens.up/down.sql           # Добавление refresh_token полей
+│
+├── go.mod
+├── go.sum
+│
+└── out/                            # Выходные директории (создаются во время работы)
+    ├── logs/                       # Лог-файлы
+    ├── pgdata/                     # Данные PostgreSQL (Docker volume)
+    └── kafka_data/                 # Данные Kafka (Docker volume)
 ```
-
-
 
 ### 2. Схема БД:
 
 ```sql
--- Предложение (offer):
-TABLE offer(
-    id           SERIAL                   PRIMARY KEY,
-    partner_id                            FOREIGN KEY,
-    category_id                           FOREIGN KEY,
-    name         VARCHAR(100)   NOT NULL  CHECK (char_length(name) BETWEEN 1 AND 100),
-    description  VARCHAR(1000)            CHECK (char_length(description) BETWEEN 1 AND 1000), 
-    created_at   TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP,         
-    expire_at    TIMESTAMPTZ    NOT NULL            
+-- Схема: affiliate_system
+
+-- Пользователь (user):
+TABLE users(
+    id                    SERIAL        PRIMARY KEY,
+    username              VARCHAR(50),                          -- опционально (был NOT NULL, изменено в миграции 000003)
+    email                 VARCHAR(100)  NOT NULL  UNIQUE,       -- UNIQUE добавлено в миграции 000004
+    password_hash         VARCHAR(255)  NOT NULL  UNIQUE,       -- UNIQUE добавлено в миграции 000004
+    is_admin              BOOLEAN       DEFAULT FALSE,
+    refresh_token         VARCHAR(512),                         -- добавлено в миграции 000005
+    refresh_token_expires_at TIMESTAMPTZ,                       -- добавлено в миграции 000005
+    created_at            TIMESTAMPTZ   NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    CHECK (char_length(email) BETWEEN 1 AND 100)
 )
 
 -- Партнер (partner):
-TABLE partner(
-    id           SERIAL                   PRIMARY KEY,
-    name         VARCHAR(100)   NOT NULL  CHECK (char_length(name) BETWEEN 1 AND 100),
-    description  VARCHAR(1000)            CHECK (char_length(description) BETWEEN 1 AND 1000)    
+TABLE partners(
+    id          SERIAL        PRIMARY KEY,
+    name        VARCHAR(100)  NOT NULL,
+    description VARCHAR(1000),
+    created_at  TIMESTAMPTZ   NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    CHECK (char_length(name) BETWEEN 1 AND 100),
+    CHECK (description IS NULL OR char_length(description) BETWEEN 1 AND 1000)
 )
 
 -- Категория (category):
-TABLE category(
-    id           SERIAL                   PRIMARY KEY,
-    name         VARCHAR(100)   NOT NULL  CHECK (char_length(name) BETWEEN 1 AND 100),
-    description  VARCHAR(1000)            CHECK (char_length(description) BETWEEN 1 AND 1000) 
+TABLE categories(
+    id          SERIAL        PRIMARY KEY,
+    name        VARCHAR(100)  NOT NULL,
+    description VARCHAR(1000),
+    created_at  TIMESTAMPTZ   NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    CHECK (char_length(name) BETWEEN 1 AND 100),
+    CHECK (description IS NULL OR char_length(description) BETWEEN 1 AND 1000)
+)
+
+-- Город (city):
+TABLE cities(
+    id          SERIAL        PRIMARY KEY,
+    name        VARCHAR(50)   NOT NULL,
+    created_at  TIMESTAMPTZ   NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    CHECK (char_length(name) BETWEEN 1 AND 50)
+)
+
+-- Предложение (offer):
+TABLE offers(
+    id          SERIAL        PRIMARY KEY,
+    partner_id  INTEGER       NOT NULL  REFERENCES partners(id) ON DELETE RESTRICT,
+    category_id INTEGER       NOT NULL  REFERENCES categories(id) ON DELETE RESTRICT,
+    city_id     INTEGER       NOT NULL  REFERENCES cities(id) ON DELETE RESTRICT,
+    name        VARCHAR(100)  NOT NULL,
+    description VARCHAR(1000),
+    created_at  TIMESTAMPTZ   NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    expire_at   TIMESTAMPTZ   NOT NULL,
+    CHECK (char_length(name) BETWEEN 1 AND 100),
+    CHECK (description IS NULL OR char_length(description) BETWEEN 1 AND 1000)
+)
+
+-- Лог событий (event_log):
+TABLE event_log(
+    id          SERIAL        PRIMARY KEY,
+    event_type  VARCHAR(50)   NOT NULL,
+    entity_type VARCHAR(50)   NOT NULL,
+    entity_id   INTEGER       NOT NULL,
+    payload     JSONB         NOT NULL,
+    created_at  TIMESTAMPTZ   NOT NULL  DEFAULT CURRENT_TIMESTAMP
 )
 ```
+
+### 3. API Endpoints:
+
+Базовый путь: `/api/v1/`
+
+| Метод      | Путь                        | Аутентификация | Описание                        |
+|------------|-----------------------------|----------------|---------------------------------|
+| **Auth**   |                             |                |                                 |
+| `POST`     | `/register`                 | Нет            | Регистрация нового пользователя |
+| `POST`     | `/login`                    | Нет            | Вход в систему                  |
+| `POST`     | `/logout`                   | Да             | Выход из системы                |
+| `POST`     | `/refresh_token`            | Нет            | Обновление access токена        |
+| **Cities** |                             |                |                                 |
+| `POST`     | `/cities`                   | Да             | Создание города                 |
+| `GET`      | `/cities/{id}`              | Нет            | Получение города по ID          |
+| `PATCH`    | `/cities/{id}`              | Да             | Обновление города               |
+| `DELETE`   | `/cities/{id}`              | Да             | Удаление города                 |
+| **Partners** |                           |                |                                 |
+| `POST`     | `/partners`                 | Да             | Создание партнера               |
+| `GET`      | `/partners/{id}`            | Нет            | Получение партнера по ID        |
+| `PATCH`    | `/partners/{id}`            | Да             | Обновление партнера             |
+| `DELETE`   | `/partners/{id}`            | Да             | Удаление партнера               |
+| **Categories** |                        |                |                                 |
+| `POST`     | `/categories`               | Да             | Создание категории              |
+| `GET`      | `/categories/{id}`          | Нет            | Получение категории по ID       |
+| `PATCH`    | `/categories/{id}`          | Да             | Обновление категории            |
+| `DELETE`   | `/categories/{id}`          | Да             | Удаление категории              |
+| **Users**  |                             |                |                                 |
+| `POST`     | `/users`                    | Да             | Создание пользователя           |
+| `GET`      | `/users/{id}`               | Да             | Получение пользователя по ID    |
+| `PATCH`    | `/users/{id}`               | Да             | Обновление пользователя         |
+| `DELETE`   | `/users/{id}`               | Да             | Удаление пользователя           |
+| **Docs**   |                             |                |                                 |
+| `GET`      | `/docs/*`                   | Нет            | Swagger UI документация         |
+
+### 4. Технологический стек:
+
+- **Язык:** Go 1.25
+- **HTTP роутер:** Стандартный `net/http` + `http.ServeMux`
+- **База данных:** PostgreSQL 18 с WAL (Logical Replication)
+- **Брокер сообщений:** Apache Kafka 4.3
+- **WAL-listener:** [ihippik/wal-listener](https://github.com/ihippik/wal-listener) v2.11.0
+- **Миграции:** [golang-migrate/migrate](https://github.com/golang-migrate/migrate) v4.19.1
+- **Логирование:** go.uber.org/zap
+- **JWT:** golang-jwt/jwt/v5
+- **Пароли:** bcrypt (golang.org/x/crypto)
+- **Пул соединений:** jackc/pgx/v5 (pgxpool)
+- **Валидация:** go-playground/validator/v10
+- **Swagger:** swaggo/swag v1.16.6
+- **Фронтенд:** Vue.js 2.x
+
+### 5. Инфраструктура (Docker Compose):
+
+Сервисы, запускаемые через `docker compose`:
+
+| Сервис                          | Назначение                                    |
+|---------------------------------|-----------------------------------------------|
+| `affiliate-system-postgres`     | PostgreSQL с включенным WAL logical replication |
+| `affiliate-system-kafka`        | Apache Kafka (KRaft mode, без Zookeeper)      |
+| `affiliate-system-wal-listener` | Слушает WAL и публикует изменения в Kafka     |
+| `affiliate-system-swagger`      | Генерация Swagger документации                |
+| `affiliate-system-migrate`      | Выполнение SQL миграций БД                    |
+
+### 6. Конфигурация (переменные окружения):
+
+| Переменная                              | Описание                              |
+|-----------------------------------------|---------------------------------------|
+| `SERVER_HOST`                           | Хост HTTP сервера                     |
+| `SERVER_PORT`                           | Порт HTTP сервера                     |
+| `SERVER_SHUTDOWN_TIMEOUT`               | Таймаут graceful shutdown             |
+| `DATABASE_POSTGRES_HOST`                | Хост PostgreSQL                       |
+| `DATABASE_POSTGRES_PORT`                | Порт PostgreSQL                       |
+| `DATABASE_POSTGRES_USER`                | Пользователь PostgreSQL               |
+| `DATABASE_POSTGRES_PASSWORD`            | Пароль PostgreSQL                     |
+| `DATABASE_POSTGRES_DB`                  | Название БД                           |
+| `DATABASE_POSTGRES_URL`                 | Полный URL подключения к БД           |
+| `DATABASE_POSTGRES_TIMEOUT`             | Таймаут операций с БД                 |
+| `SECURITY_SECRET_KEY`                   | Секретный ключ для JWT                |
+| `SECURITY_ACCESS_TOKEN_EXPIRE_MINUTES`  | Время жизни access токена (мин)       |
+| `SECURITY_REFRESH_TOKEN_EXPIRE_DAYS`    | Время жизни refresh токена (дни)      |
+| `LOGGER_LEVEL`                          | Уровень логирования                   |
+| `LOGGER_FOLDER`                         | Папка для лог-файлов                  |
+| `ENVIRONMENT_DEBUG`                     | Режим отладки                         |
+
+### 7. Команды Makefile:
+
+| Команда              | Описание                                          |
+|----------------------|----------------------------------------------------|
+| `make env-up`        | Запуск инфраструктуры (Postgres, Kafka, WAL-listener) |
+| `make env-down`      | Остановка инфраструктуры                          |
+| `make migrate-up`    | Применение миграций БД                            |
+| `make migrate-down`  | Откат миграций БД                                 |
+| `make migrate-status`| Статус миграций                                   |
+| `make migrate-create seq=<name>` | Создание новой миграции                |
+| `make run-server`    | Запуск HTTP сервера                               |
+| `make run-consumer`  | Запуск Kafka consumer                             |
+| `make swagger-gen`   | Генерация Swagger документации                    |
+
+### 8. Архитектурные решения:
+
+- **Чистая архитектура (Clean Architecture):** Код разделен на слои: транспорт (HTTP handlers) → сервис (бизнес-логика) → репозиторий (работа с БД).
+- **Dependency Injection:** Зависимости (репозитории, сервисы) создаются в `main.go` и передаются через конструкторы.
+- **Domain Events:** Каждая сущность генерирует события (created, updated, deleted), которые могут быть опубликованы в Kafka через WAL-listener.
+- **JWT Authentication:** Двухтокенная аутентификация (access + refresh token) с middleware для защиты эндпоинтов.
+- **Graceful Shutdown:** Сервер корректно обрабатывает сигналы SIGINT/SIGTERM.
+- **Версионирование API:** Поддержка множества версий API через `APIVersionRouter` (v1, v2, v3).
